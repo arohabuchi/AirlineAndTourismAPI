@@ -1,5 +1,4 @@
-# Owners of a small commuter airline want a website where customers to be able to view flight 
-# information and reserve tickets for flights using a Web registration system, they also want it to be with MSSQL DB and using OOP.
+# Owners of a small commuter airline want a website where customers to be able to view flight information and reserve tickets for flights using a Web registration system, they also want it to be with MSSQL DB and using OOP.
 
 After interviewing the business managers and the ticketing agents, the software designers draft an SRS document that lists the system’s functional requirements. 
 The following are some of these requirements
