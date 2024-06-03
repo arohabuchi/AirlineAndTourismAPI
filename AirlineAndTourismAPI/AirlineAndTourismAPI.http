@@ -1,0 +1,6 @@
+@AirlineAndTourismAPI_HostAddress = http://localhost:5202
+
+GET {{AirlineAndTourismAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
