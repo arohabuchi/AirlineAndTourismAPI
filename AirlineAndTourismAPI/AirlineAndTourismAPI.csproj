@@ -30,7 +30,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Controllers\" />
+	  <Folder Include="Dto\ActiveFlight\" />
+	  <Folder Include="Dto\Bookings\" />
+	  <Folder Include="Migrations\" />
 	</ItemGroup>
 
 </Project>

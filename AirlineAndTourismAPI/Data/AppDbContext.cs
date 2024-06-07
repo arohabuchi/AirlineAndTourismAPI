@@ -10,5 +10,8 @@ namespace AirlineAndTourismAPI.Data
         {
             
         }
+        public DbSet<Flight> Flights { get; set; }
+        public DbSet<Bookings> Bookings { get; set; }
+        public DbSet<ActiveFlight> activeFlights { get; set; }
     }
 }

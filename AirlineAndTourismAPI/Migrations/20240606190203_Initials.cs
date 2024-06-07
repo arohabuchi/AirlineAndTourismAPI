@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AirlineAndTourismAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class Initials : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -51,6 +51,22 @@ namespace AirlineAndTourismAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Flights",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AcquiredDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SeatNumber = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Flights", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -159,6 +175,62 @@ namespace AirlineAndTourismAPI.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "activeFlights",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NextFlightDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NextDestinationAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    currentLocation = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TicketPrice = table.Column<double>(type: "float", nullable: false),
+                    MaxSeatNumber = table.Column<int>(type: "int", nullable: false),
+                    flightId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_activeFlights", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_activeFlights_Flights_flightId",
+                        column: x => x.flightId,
+                        principalTable: "Flights",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Bookings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SeatNumber = table.Column<int>(type: "int", nullable: false),
+                    BookingNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    flightId = table.Column<int>(type: "int", nullable: false),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bookings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Bookings_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Bookings_activeFlights_flightId",
+                        column: x => x.flightId,
+                        principalTable: "activeFlights",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_activeFlights_flightId",
+                table: "activeFlights",
+                column: "flightId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -197,6 +269,16 @@ namespace AirlineAndTourismAPI.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_AppUserId",
+                table: "Bookings",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_flightId",
+                table: "Bookings",
+                column: "flightId");
         }
 
         /// <inheritdoc />
@@ -218,10 +300,19 @@ namespace AirlineAndTourismAPI.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Bookings");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "activeFlights");
+
+            migrationBuilder.DropTable(
+                name: "Flights");
         }
     }
 }

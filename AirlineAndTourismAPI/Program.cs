@@ -1,7 +1,10 @@
 using AirlineAndTourismAPI.Data;
+using AirlineAndTourismAPI.Data.Interface;
+using AirlineAndTourismAPI.Data.RepoServices;
 using AirlineAndTourismAPI.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,7 +38,7 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
-
+builder.Services.AddScoped<IFlightRepo, FlightRepo>();
 
 builder.Services.AddControllers();
     //.AddNewtonsoftJson(option => {
@@ -47,10 +50,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddDbContext<AppDbContext>(option =>
+
+
+builder.Services.AddDbContext<AppDbContext>(options => 
 {
-    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionStrings"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    
 });
+
+
+
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
 {
